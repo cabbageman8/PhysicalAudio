@@ -34,23 +34,23 @@ def handle_input():
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             quit = True
-        elif event.type == pygame.KEYDOWN:
+        elif event.type in (pygame.KEYDOWN, pygame.KEYUP):
             if event.key == pygame.K_ESCAPE:
                 quit = True
             else:
                 event_queue.append(event)
 
 while not quit:
-    before = time.perf_counter()
+    #before = time.perf_counter()
     #cProfile.run('buffer = sim_wire.update(FPS, SAMPLE_RATE)', sort=2)
     buffer = sim_wire.update(FPS, SAMPLE_RATE)
-    print("update time = ", int((time.perf_counter() - before)*1000), "ms")
+    #print("update time = ", int((time.perf_counter() - before)*1000), "ms")
     byt = buffer.tobytes()
     stream.write(byt, len(buffer))
     if GUI:
         handle_input()
         sim_wire.updateGUI(pygame, event_queue, WIN_SIZE, scr, silombol, buffer)
-    time.sleep(1/FPS)
+    #time.sleep(1/FPS)
 
 if GUI:
     pygame.quit()
